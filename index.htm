@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blind Test — iOS 26.5 Liquid Vision</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shine: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 50%);
+            --accent: #007aff;
+            --accent-neon: #00f0ff;
+            --accent-green: #30d158;
+            --accent-red: #ff453a;
+            --text-main: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #020205;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            padding-bottom: 120px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* iOS 26.5 MAXIMUM LIQUID ENGINE */
+        .liquid-core {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0c0a1c 0%, #020205 100%);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            mix-blend-mode: screen;
+            animation: moveLiquid 18s ease-in-out infinite alternate;
+        }
+        .blob-1 { width: 500px; height: 500px; background: #007aff; top: -10%; left: -10%; animation-delay: 0s; }
+        .blob-2 { width: 600px; height: 600px; background: #ff2d55; bottom: -15%; right: -5%; animation-delay: -4s; }
+        .blob-3 { width: 450px; height: 450px; background: #af52de; top: 40%; left: 50%; animation-delay: -8s; }
+        .blob-4 { width: 350px; height: 350px; background: #00f0ff; bottom: 20%; left: 10%; animation-delay: -12s; }
+
+        @keyframes moveLiquid {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate(70px, -50px) scale(1.15) rotate(120deg); }
+            66% { transform: translate(-40px, 60px) scale(0.9) rotate(240deg); }
+            100% { transform: translate(30px, -20px) scale(1.1) rotate(360deg); }
+        }
+
+        /* ULTRA GLASS PANEL */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(45px) saturate(250%);
+            -webkit-backdrop-filter: blur(45px) saturate(250%);
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 35px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+                        0 0 40px rgba(0, 122, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100%;
+            background: var(--glass-shine);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 30px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        #welcome-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .welcome-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* CARD SELECTION */
+        .level-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 18px 22px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+
+        .level-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: 22px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0); transition: box-shadow 0.3s;
+        }
+
+        .level-card:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255,255,255,0.3);
+            transform: scale(1.02) translateY(-2px);
+        }
+        .level-card:hover::after {
+            box-shadow: 0 0 25px rgba(0, 122, 255, 0.25);
+        }
+
+        .level-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .level-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        #game-screen { display: none; }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 12px 24px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-bar span { color: #fff; font-weight: 700; }
+
+        /* PLAYER */
+        .custom-audio-player {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .play-btn-huge {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #ffffff 0%, #dcdcdc 100%);
+            border: none; display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 3px 3px #fff, 0 0 30px rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.15, 0.85, 0.3, 1.2);
+        }
+
+        .play-btn-huge:active { transform: scale(0.9); }
+
+        .play-btn-huge svg { width: 32px; height: 32px; fill: #000; margin-left: 5px; }
+        .play-btn-huge.playing svg { margin-left: 0; }
+
+        .progress-timeline {
+            width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px; position: relative; overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-neon));
+            border-radius: 4px;
+            box-shadow: 0 0 12px var(--accent-neon);
+            transition: width 0.1s linear;
+        }
+
+        /* GRID PROP CHOC */
+        .options-grid {
+            display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 25px;
+        }
+        .options-grid.grid-8 { grid-template-columns: repeat(2, 1fr); }
+
+        @media (max-width: 480px) {
+            .options-grid.grid-8 { grid-template-columns: 1fr; }
+        }
+
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 18px 22px; font-size: 15px; font-weight: 600;
+            border-radius: 20px; cursor: pointer; text-align: left;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+
+        .choice-btn.correct {
+            background: linear-gradient(135deg, rgba(48, 209, 88, 0.25), rgba(48, 209, 88, 0.4)) !important;
+            border-color: var(--accent-green) !important;
+            color: #fff; font-weight: 700;
+            box-shadow: 0 0 30px rgba(48, 209, 88, 0.4);
+            animation: successPulse 0.4s ease-in-out;
+        }
+
+        .choice-btn.wrong {
+            background: linear-gradient(135deg, rgba(255, 69, 58, 0.25), rgba(255, 69, 58, 0.4)) !important;
+            border-color: var(--accent-red) !important;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255, 69, 58, 0.3);
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        /* LEVEL 4 INPUT */
+        .input-box-wrapper {
+            display: none; flex-direction: column; position: relative; margin-bottom: 25px;
+        }
+
+        .text-input-field {
+            width: 100%; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 20px; color: #fff; font-size: 16px; font-weight: 600;
+            outline: none; text-align: center;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .text-input-field:focus {
+            border-color: var(--accent-neon);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* SUGGESTIONS */
+        .suggestions-dropdown {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(35px) saturate(200%);
+            -webkit-backdrop-filter: blur(35px) saturate(200%);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px; max-height: 220px; overflow-y: auto;
+            z-index: 999; margin-top: 8px; display: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .suggestion-row {
+            padding: 16px 20px; cursor: pointer; text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85);
+            transition: background 0.2s;
+        }
+
+        .suggestion-row:hover {
+            background: linear-gradient(90deg, rgba(0, 122, 255, 0.35), rgba(0, 240, 255, 0.1));
+            color: #fff; font-weight: 600;
+        }
+
+        .main-action-trigger {
+            background: linear-gradient(135deg, var(--accent), #0051a8);
+            color: #fff; border: none; border-radius: 20px;
+            padding: 18px; width: 100%; font-size: 16px; font-weight: 700;
+            cursor: pointer; display: none;
+            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4);
+            transition: all 0.3s;
+        }
+
+        .main-action-trigger:active { transform: scale(0.97); }
+
+        #score-screen { display: none; }
+        .huge-score {
+            font-size: 64px; font-weight: 800; margin: 20px 0;
+            background: linear-gradient(180deg, #00f0ff, #007aff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 12px rgba(0,122,255,0.3));
+        }
+
+        .primary-controls {
+            margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+        }
+
+        .big-util-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 16px 12px; border-radius: 20px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            backdrop-filter: blur(10px); transition: all 0.2s;
+        }
+
+        .big-util-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+
+        .big-util-btn.restart-danger:hover {
+            border-color: var(--accent-red);
+            background: rgba(255, 69, 58, 0.15);
+            color: #ff453a;
+            box-shadow: 0 0 15px rgba(255, 69, 58, 0.1);
+        }
+
+        /* DOCK IOS 26.5 */
+        .ios-dock {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(45px) saturate(230%);
+            -webkit-backdrop-filter: blur(45px) saturate(230%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px; padding: 12px 24px;
+            display: flex; align-items: center; gap: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2);
+            z-index: 1000; width: max-content; max-width: 92vw;
+        }
+
+        .dock-circle-item {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 22px; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none; position: relative;
+        }
+
+        .dock-circle-item:hover {
+            transform: scale(1.2) translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="liquid-core">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
+    </div>
+
+    <div class="glass-panel">
+        <h1>Blind Test</h1>
+
+        <div id="welcome-screen">
+            <p class="welcome-desc">Sélectionnez un pack de jeu liquide iOS 26.5</p>
+            <div class="level-card" onclick="selectLevelAndStart(1)">
+                <h3>Niveau 1</h3>
+                <p>Début de la piste — Titre + Artiste visibles</p>
+            </div>
+            <div class="level-card" onclick="selectLevelAndStart(2)">
+                <h3>Niveau 2</h3>
+                <p>Début aléatoire en milieu — Titre + Artiste visibles</p>
+            </div>
+            <div class="level-card" onclick="selectLevelAndStart(3)">
+                <h3>Niveau 3</h3>
+                <p>Milieu aléatoire — Grille de 8 choix complets</p>
+            </div>
+            <div class="level-card" onclick="selectLevelAndStart(4)">
+                <h3>Niveau 4</h3>
+                <p>Saisie clavier (Moitié du titre suffisant, sans l'artiste)</p>
+            </div>
+        </div>
+
+        <div id="game-screen">
+            <div class="stats-bar">
+                <div>Piste : <span id="track-number">1 / 10</span></div>
+                <div>Score : <span id="current-score">0</span></div>
+                <div>Temps : <span id="global-timer">00:00</span></div>
+            </div>
+
+            <div class="custom-audio-player">
+                <button class="play-btn-huge" id="custom-play-trigger" onclick="toggleAudioPlayback()">
+                    <svg id="play-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="progress-timeline">
+                    <div class="progress-bar-fill" id="progress-indicator"></div>
+                </div>
+            </div>
+
+            <div class="options-grid" id="choices-grid-box"></div>
+
+            <div class="input-box-wrapper" id="text-input-wrapper">
+                <input type="text" class="text-input-field" id="user-typed-title" placeholder="Tapez le titre..." autocomplete="off" oninput="processUserTyping()">
+                <div class="suggestions-dropdown" id="suggestions-box"></div>
+            </div>
+
+            <button class="main-action-trigger" id="forward-action-btn" onclick="goToNextTrack()">Piste Suivante</button>
+        </div>
+
+        <div id="score-screen">
+            <h3 style="font-size:24px; font-weight:700;">Session Terminée !</h3>
+            <div class="huge-score"><span id="final-marked-score">0</span> / 10</div>
+            <p style="color:var(--text-secondary); margin-bottom: 25px;">Temps global : <span id="final-marked-time" style="color:#fff; font-weight:700;">00:00</span></p>
+            <button class="main-action-trigger" style="display:block; background: linear-gradient(135deg, var(--accent-green), #1d9e3b);" onclick="resetToGlobalWelcome()">Relancer une session</button>
+        </div>
+
+        <div class="primary-controls">
+            <button class="big-util-btn restart-danger" onclick="triggerSessionRestart()">🔄 Recommencer</button>
+            <button class="big-util-btn" onclick="bypassCurrentTrack()">⏭️ Sauter titre</button>
+        </div>
+    </div>
+
+    <div class="ios-dock">
+        <a href="https://natlacaxi.github.io/music" target="_blank" class="dock-circle-item">🎵</a>
+        <a href="https://natlacaxi.github.io/dj-mode" target="_blank" class="dock-circle-item">🎧</a>
+        <a href="https://natlacaxi.github.io/paroles-music" target="_blank" class="dock-circle-item">🎤</a>
+    </div>
+
+    <audio id="hidden-core-audio"></audio>
+
+<script>
+    const allTracks = [
+        { name: "LVC - Shotas ft Koba", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1779877904/LVC_-_Shotas_ft_Koba_yoyul6.mp3" },
+        { name: "Flying Blue - La Fouine - L2B", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1779877903/Flying_Blue_-_La_Fouine_-_L2B_tfht7b.mp3" },
+        { name: "Mr Saxobeat - Alexandra Stan", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1779877901/Mr_Saxobeat_-_Alexandra_Stan_jnotm1.mp3" },
+        { name: "Tiki Tiki - Qmir", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1779877901/Tiki_Tiki_-_Qmir_p0aoai.mp3" },
+        { name: "Pilier - Ninho", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1779877900/Pilier_-_Ninho_bhnwso.mp3" },
+        { name: "Yeah - Usher", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483853/Yeah_-_Usher_lrfcrb.mp3" },
+        { name: "When We Were Young - David Guetta Kim Petras", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483853/When_We_Were_Young_-_David_Guetta_Kim_Petras_k6fifd.mp3" },
+        { name: "Walking Away - Matway June", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483852/Walking_Away_-_Matway_June_fbnuun.mp3" },
+        { name: "Wesh Alors - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483852/Wesh_Alors_-_Jul_pqhzgm.mp3" },
+        { name: "Vida Loca - Magic System", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483852/Vida_Loca_-_Magic_System_bwyuqw.mp3" },
+        { name: "Where Are You Now Lost Frequencies", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483852/Where_Are_You_Now_Lost_Frequencies_jkobo7.mp3" },
+        { name: "Two Steps From Hell - Never Back Down", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483851/Two_Steps_From_Hell_-_Never_Back_Down_nrlq13.mp3" },
+        { name: "Tropical - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483850/Tropical_-_Jul_a5rg4r.mp3" },
+        { name: "Titanium David Guetta Sia", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483851/Titanium_David_Guetta_Sia_dxshjn.mp3" },
+        { name: "Tu me rends bête - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483851/Tu_me_rends_b%C3%AAte_-_Gims_ilrc2g.mp3" },
+        { name: "Trailer Sport Stylish", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483850/Trailer_Sport_Stylish_aulxai.mp3" },
+        { name: "Thunder - Gabry Ponte Lumix", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483850/Thunder_-_Gabry_Ponte_Lumix_uxlewh.mp3" },
+        { name: "The Final Countdown - Europe", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483850/The_Final_Countdown_-_Europe_kupcbn.mp3" },
+        { name: "This is the Life - Amy Macdonald", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483849/This_is_the_Life_-_Amy_Macdonald_yqc43z.mp3" },
+        { name: "The Sound of Silence - Cyril", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483849/The_Sound_of_Silence_-_Cyril_qsc5tk.mp3" },
+        { name: "The Magic Key - Trinix", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483848/The_Magic_Key_-_Trinix_gciubv.mp3" },
+        { name: "The Fate of Ophélia - Taylor Swift", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483848/The_Fate_of_Oph%C3%A9lia_-_Taylor_Swift_rqzysk.mp3" },
+        { name: "The Dead Dance - Lady Gaga", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483848/The_Dead_Dance_-_Lady_Gaga_n0s79k.mp3" },
+        { name: "Terminal 2F - Gims Dadju", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483848/Terminal_2F_-_Gims_Dadju_k9bgda.mp3" },
+        { name: "Tatoo - Loreen", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483848/Tatoo_-_Loreen_uxobny.mp3" },
+        { name: "Tahiti - Keen V", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483847/Tahiti_-_Keen_V_fyysxj.mp3" },
+        { name: "Sur ma Route - Black M", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483847/Sur_ma_Route_-_Black_M_o19s6o.mp3" },
+        { name: "Symphonie en Do 2 Mouvement G. Bizet", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483847/Symphonie_en_Do_2_Mouvement_G._Bizet_jzsl59.mp3" },
+        { name: "Sonate au Clair de Lune 3eme Mouvement - L-W Beethoven", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483847/Sonate_au_Clair_de_Lune_3eme_Mouvement_-_L-W_Beethoven_riue8t.mp3" },
+        { name: "Sun Is Up - Inna", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483846/Sun_Is_Up_-_Inna_inu2jl.mp3" },
+        { name: "Spider - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483846/Spider_-_Gims_h9rhsa.mp3" },
+        { name: "SPA - Gims - Théodora", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483846/SPA_-_Gims_-_Th%C3%A9odora_x2mifi.mp3" },
+        { name: "Sonate au Clair de Lune 1er Mouvement - L-W Beethoven", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483846/Sonate_au_Clair_de_Lune_1er_Mouvement_-_L-W_Beethoven_xdi4kv.mp3" },
+        { name: "Shake It to the Max - FLY", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483845/Shake_It_to_the_Max_-_FLY_dhovbg.mp3" },
+        { name: "Sois pas Timide - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483845/Sois_pas_Timide_-_Gims_lfgo1e.mp3" },
+        { name: "Someone to be Mine - Boris Way Topic", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483845/Someone_to_be_Mine_-_Boris_Way_Topic_vychwt.mp3" },
+        { name: "Some Kind of Kiss - Sound of Legend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483844/Some_Kind_of_Kiss_-_Sound_of_Legend_otxi57.mp3" },
+        { name: "Somewhere - West Side Story", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483844/Somewhere_-_West_Side_Story_yvdubp.mp3" },
+        { name: "Sapés comme jamais - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483844/Sap%C3%A9s_comme_jamais_-_Gims_at8eds.mp3" },
+        { name: "Samba de Janeiro - Bellini", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483843/Samba_de_Janeiro_-_Bellini_kvakb8.mp3" },
+        { name: "Rondo alla Turca - W-A Mozart", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483843/Rondo_alla_Turca_-_W-A_Mozart_df0v9m.mp3" },
+        { name: "Rush E - Andrew Wrangell", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483843/Rush_E_-_Andrew_Wrangell_vvg1fk.mp3" },
+        { name: "Prélude et Allegro - Fritz Kreisler", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483843/Pr%C3%A9lude_et_Allegro_-_Fritz_Kreisler_ealdfh.mp3" },
+        { name: "Rock my Body - R3HAB Inna Sash", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483843/Rock_my_Body_-_R3HAB_Inna_Sash_t1c4k2.mp3" },
+        { name: "Phénoménal - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483841/Ph%C3%A9nom%C3%A9nal_-_Jul_sqbwad.mp3" },
+        { name: "Queen of my Castle - Kris Kross Amsterdam Inna", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483842/Queen_of_my_Castle_-_Kris_Kross_Amsterdam_Inna_m97rlh.mp3" },
+        { name: "Que Pasa - Dr. Yaro", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483842/Que_Pasa_-_Dr._Yaro_f5dz6v.mp3" },
+        { name: "Play Hard - David Guetta", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483841/Play_Hard_-_David_Guetta_pj10j0.mp3" },
+        { name: "Parisienne - Gims La Mano 1.9", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483841/Parisienne_-_Gims_La_Mano_1.9_qgvfoq.mp3" },
+        { name: "Pepas - Farruko", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483841/Pepas_-_Farruko_nlw3b5.mp3" },
+        { name: "One in a Million - David Guetta Rexa", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483840/One_in_a_Million_-_David_Guetta_Rexa_lgr2qu.mp3" },
+        { name: "Minimum Ça - Dr. Yaro", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483840/Minimum_%C3%87a_-_Dr._Yaro_gjlyd5.mp3" },
+        { name: "Never Going Home Tonight - David Guetta Alesso", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483839/Never_Going_Home_Tonight_-_David_Guetta_Alesso_vhoxix.mp3" },
+        { name: "Ninao - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483839/Ninao_-_Gims_jyr0od.mp3" },
+        { name: "Nostalgique - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483839/Nostalgique_-_Jul_naxapx.mp3" },
+        { name: "Nouveau Jingle Idfm", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483839/Nouveau_Jingle_Idfm_leh9ra.mp3" },
+        { name: "Moonlight Shadow - Sound of Legend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483839/Moonlight_Shadow_-_Sound_of_Legend_prwz8g.mp3" },
+        { name: "My Hearts Will Go On - Céline Dion", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483838/My_Hearts_Will_Go_On_-_C%C3%A9line_Dion_djzwbk.mp3" },
+        { name: "Mr-MMe - Loïc Nottet", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483838/Mr-MMe_-_Lo%C3%AFc_Nottet_s728ji.mp3" },
+        { name: "Moulaga - Jul Heuss l Enfoiré", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483838/Moulaga_-_Jul_Heuss_l_Enfoir%C3%A9_vguy6v.mp3" },
+        { name: "Miss you - Oliver Tree et Robin Schultz", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483837/Miss_you_-_Oliver_Tree_et_Robin_Schultz_px9hzz.mp3" },
+        { name: "Monster - Gabry Ponte Lumix", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483837/Monster_-_Gabry_Ponte_Lumix_r4vjlf.mp3" },
+        { name: "Memories - Sam Feldt Jonas Blue", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483836/Memories_-_Sam_Feldt_Jonas_Blue_giddiy.mp3" },
+        { name: "Melrose Place - Keblack", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483836/Melrose_Place_-_Keblack_gl78dp.mp3" },
+        { name: "Mélodrama - Théodora Diziz", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483836/M%C3%A9lodrama_-_Th%C3%A9odora_Diziz_dmyxat.mp3" },
+        { name: "Make you Mouv", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483836/Make_you_Mouv_xqbcbf.mp3" },
+        { name: "Magic in the Air - Magic System", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483836/Magic_in_the_Air_-_Magic_System_v2klhd.mp3" },
+        { name: "Ma Chérie - Dj Antoine et The Beat Sheakers", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483836/Ma_Ch%C3%A9rie_-_Dj_Antoine_et_The_Beat_Sheakers_xsspzs.mp3" },
+        { name: "Macarena- Los del Rio", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483835/Macarena-_Los_del_Rio_ynkhyg.mp3" },
+        { name: "Madrid City - Ana Mena", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483835/Madrid_City_-_Ana_Mena_blhth7.mp3" },
+        { name: "Ma jolie - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483834/Ma_jolie_-_Jul_gda7l5.mp3" },
+        { name: "Logobitombo - Moussier Tombola", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483834/Logobitombo_-_Moussier_Tombola_pdg3br.mp3" },
+        { name: "Loca Loca - R3HAD Pelican", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483834/Loca_Loca_-_R3HAD_Pelican_gsogcs.mp3" },
+        { name: "Les démons de Minuit - Images", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483834/Les_d%C3%A9mons_de_Minuit_-_Images_o2yeq3.mp3" },
+        { name: "Lettre à Elise - L.V. Beethoven", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483834/Lettre_%C3%A0_Elise_-_L.V._Beethoven_tvslc6.mp3" },
+        { name: "Le Coach - Soprano", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483833/Le_Coach_-_Soprano_crn2sm.mp3" },
+        { name: "In My Mind - Dynoro", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483833/In_My_Mind_-_Dynoro_f8zogz.mp3" },
+        { name: "Laissez passez - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483833/Laissez_passez_-_Gims_mf8uqs.mp3" },
+        { name: "Lacriosa - W-A Mozart", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483832/Lacriosa_-_W-A_Mozart_rty8jr.mp3" },
+        { name: "I m Yours - Jason Mraz", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483832/I_m_Yours_-_Jason_Mraz_wrnbf1.mp3" },
+        { name: "Is It Love - Loreen", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483832/Is_It_Love_-_Loreen_qx9ajy.mp3" },
+        { name: "La Reine de Coeur - Francis Poulenc", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483832/La_Reine_de_Coeur_-_Francis_Poulenc_qxgprn.mp3" },
+        { name: "Fantaisie Alto - J.N Hummel", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483830/Fantaisie_Alto_-_J.N_Hummel_ysfeyc.mp3" },
+        { name: "I Like to Move it - MIMAA Manos", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483830/I_Like_to_Move_it_-_MIMAA_Manos_rnx11i.mp3" },
+        { name: "I m Good - David Guetta Bébé Rexa", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483831/I_m_Good_-_David_Guetta_B%C3%A9b%C3%A9_Rexa_chqszk.mp3" },
+        { name: "I m Still Standing - Sound of Legend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483831/I_m_Still_Standing_-_Sound_of_Legend_vvesuz.mp3" },
+        { name: "I don t Wanna Wait - David Guetta One Républic", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483831/I_don_t_Wanna_Wait_-_David_Guetta_One_R%C3%A9public_ni7l2x.mp3" },
+        { name: "I Gotta Feelings - The Black Eyes Peas", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483830/I_Gotta_Feelings_-_The_Black_Eyes_Peas_s5crbb.mp3" },
+        { name: "I can Feel - Léonie Niklas Dee", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483829/I_can_Feel_-_L%C3%A9onie_Niklas_Dee_m20rwu.mp3" },
+        { name: "I Adore You - Hugel Topic Arash", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483829/I_Adore_You_-_Hugel_Topic_Arash_jyixew.mp3" },
+        { name: "Hearts Still Beating - Nathan Dawe Bébé Rexa", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483829/Hearts_Still_Beating_-_Nathan_Dawe_B%C3%A9b%C3%A9_Rexa_c69mcj.mp3" },
+        { name: "Hôtel Room Service - Pitbull", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483829/H%C3%B4tel_Room_Service_-_Pitbull_z1apl2.mp3" },
+        { name: "Golden - Kpop Démon Hunters", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483829/Golden_-_Kpop_D%C3%A9mon_Hunters_egpddd.mp3" },
+        { name: "Gone Gone Gone - David Guetta Teddy Swims et Tones and I", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483828/Gone_Gone_Gone_-_David_Guetta_Teddy_Swims_et_Tones_and_I_cgbolc.mp3" },
+        { name: "God is a Girl - Sound of Legend Groove Covearge DJ Housekat", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483828/God_is_a_Girl_-_Sound_of_Legend_Groove_Covearge_DJ_Housekat_sbstk5.mp3" },
+        { name: "Gimme Gimme Gimme - Abba", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483827/Gimme_Gimme_Gimme_-_Abba_pro0ic.mp3" },
+        { name: "Gangnam Style - PSY", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483827/Gangnam_Style_-_PSY_e5uefn.mp3" },
+        { name: "Get Lucky - Daft Punk", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483827/Get_Lucky_-_Daft_Punk_o1must.mp3" },
+        { name: "Game Started - Sound of Legend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483826/Game_Started_-_Sound_of_Legend_ezwjnl.mp3" },
+        { name: "Freestyler - Boomfunk Mc s Lost Frequencies", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483826/Freestyler_-_Boomfunk_Mc_s_Lost_Frequencies_cmk1y2.mp3" },
+        { name: "Forever Young David Guetta - Ava Max - Alphaville", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483825/Forever_Young_David_Guetta_-_Ava_Max_-_Alphaville_xfq6kk.mp3" },
+        { name: "Free - Kalvin Harris Ellie Goulding", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483825/Free_-_Kalvin_Harris_Ellie_Goulding_ztjp9o.mp3" },
+        { name: "Freed From Desire - Gala", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483825/Freed_From_Desire_-_Gala_tr0zfo.mp3" },
+        { name: "Falbala - Carbonne", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483824/Falbala_-_Carbonne_sqmbna.mp3" },
+        { name: "For Sure - Welox - Emmanuel Macron", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483824/For_Sure_-_Welox_-_Emmanuel_Macron_xktzan.mp3" },
+        { name: "Everytime we Touch - Upsilone Cascada", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483823/Everytime_we_Touch_-_Upsilone_Cascada_zivwul.mp3" },
+        { name: "Est-ce-que tu m aimes - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483824/Est-ce-que_tu_m_aimes_-_Gims_trzlpr.mp3" },
+        { name: "Exotica - Gabry Ponte", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483823/Exotica_-_Gabry_Ponte_yqyjxs.mp3" },
+        { name: "Eine Kleine Natchmusik - W-A Mozart", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483823/Eine_Kleine_Natchmusik_-_W-A_Mozart_qpjihd.mp3" },
+        { name: "En Feu - Soprano", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483822/En_Feu_-_Soprano_ixhcef.mp3" },
+        { name: "Despacito - Luis Fonsi", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483822/Despacito_-_Luis_Fonsi_urnyyk.mp3" },
+        { name: "Ego - Willy William", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483822/Ego_-_Willy_William_szolq4.mp3" },
+        { name: "Eleckronomia - Sky High", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483822/Eleckronomia_-_Sky_High_e46wox.mp3" },
+        { name: "Diamonds - Rihanna", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483821/Diamonds_-_Rihanna_bei6ls.mp3" },
+        { name: "Dernière Danse - Indila", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483821/Derni%C3%A8re_Danse_-_Indila_bvcgcg.mp3" },
+        { name: "Dépassé - Nuit Incolore", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483820/D%C3%A9pass%C3%A9_-_Nuit_Incolore_gmjr5p.mp3" },
+        { name: "Dancing in the Flammes - The Weekend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483821/Dancing_in_the_Flammes_-_The_Weekend_cpbvpq.mp3" },
+        { name: "Danza Kuduro - Don Omar", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483821/Danza_Kuduro_-_Don_Omar_revmpw.mp3" },
+        { name: "Dame Un Grr - Fantomel Kath Linn", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483820/Dame_Un_Grr_-_Fantomel_Kath_Linn_dw0bv6.mp3" },
+        { name: "Crazy Frog - Alex F", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483819/Crazy_Frog_-_Alex_F_rrt5l7.mp3" },
+        { name: "Crying in the Dancefloor - Sam Feldt Sofiloud", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483819/Crying_in_the_Dancefloor_-_Sam_Feldt_Sofiloud_rincmi.mp3" },
+        { name: "Crusade - Gabry Ponte", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483819/Crusade_-_Gabry_Ponte_g693ix.mp3" },
+        { name: "Concerto en Do m 1er Mouvement - J.C. Bach", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483819/Concerto_en_Do_m_1er_Mouvement_-_J.C._Bach_pjvdoo.mp3" },
+        { name: "Cover me in Sunshine - Pink", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483819/Cover_me_in_Sunshine_-_Pink_naxsyx.mp3" },
+        { name: "Coffin Dance - Astronima", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483818/Coffin_Dance_-_Astronima_totoox.mp3" },
+        { name: "Ciel - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483818/Ciel_-_Gims_ri2m0u.mp3" },
+        { name: "Clic clic pan pan - Yanns", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483818/Clic_clic_pan_pan_-_Yanns_en3xfn.mp3" },
+        { name: "C est la Vie - Khaled", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483817/C_est_la_Vie_-_Khaled_hdkvyg.mp3" },
+        { name: "Charger - TDB", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483817/Charger_-_TDB_wvurmn.mp3" },
+        { name: "Chemin d Or - Werenoi", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483817/Chemin_d_Or_-_Werenoi_vrtbog.mp3" },
+        { name: "Born to Love Ya - Gabry Ponte Natinatasha Sean Paul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483817/Born_to_Love_Ya_-_Gabry_Ponte_Natinatasha_Sean_Paul_sh2nsa.mp3" },
+        { name: "Bigroom-edm", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483816/Bigroom-edm_ef922a.mp3" },
+        { name: "Bwo - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483816/Bwo_-_Jul_lfmsqv.mp3" },
+        { name: "Bloqué - Gims L2B", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483816/Bloqu%C3%A9_-_Gims_L2B_ln4hle.mp3" },
+        { name: "Bande Organisé - Jul SCH Kofs Naps Soso Maness Elams Solda Mouari", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483816/Bande_Organis%C3%A9_-_Jul_SCH_Kofs_Naps_Soso_Maness_Elams_Solda_Mouari_vycyk6.mp3" },
+        { name: "Blake TT", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483815/Blake_TT_wem71v.mp3" },
+        { name: "Bella - Gims", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483815/Bella_-_Gims_glgxjl.mp3" },
+        { name: "Asalto - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483815/Asalto_-_Jul_jrklhi.mp3" },
+        { name: "Bené - PNL", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483815/Ben%C3%A9_-_PNL_ageol0.mp3" },
+        { name: "Believe - Upsilone", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483814/Believe_-_Upsilone_kednjg.mp3" },
+        { name: "Beautiful People - David Guetta Sia", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483814/Beautiful_People_-_David_Guetta_Sia_t756jt.mp3" },
+        { name: "Basique - Orelsan", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483813/Basique_-_Orelsan_fcrwtn.mp3" },
+        { name: "Around the World - Niklas Dee", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483813/Around_the_World_-_Niklas_Dee_xvvfz8.mp3" },
+        { name: "1-28", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483812/1-28_prliva.mp3" },
+        { name: "Apt - Rosé Bruno Mars", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483813/Apt_-_Ros%C3%A9_Bruno_Mars_cbc4gx.mp3" },
+        { name: "Air Force Blanche - Gims Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483812/Air_Force_Blanche_-_Gims_Jul_abvccz.mp3" },
+        { name: "Alors la Zone - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483812/Alors_la_Zone_-_Jul_h4fch1.mp3" },
+        { name: "Appelle moi l Ovni - Jul", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483812/Appelle_moi_l_Ovni_-_Jul_yn7zss.mp3" },
+        { name: "Abracadabra - Lady Gaga", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483812/Abracadabra_-_Lady_Gaga_ysahnb.mp3" },
+        { name: "Abcdefu - Gayle", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483811/Abcdefu_-_Gayle_uj631e.mp3" },
+        { name: "You Keep me Hangin On Sound of Legend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1778483811/You_Keep_me_Hangin_On_Sound_of_Legend_qwdzhc.mp3" },
+        { name: "San Francisco – Sound of Legend", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316654/Unstoppable_-_Sia_jmbpxu.mp3" },
+        { name: "One more time – Daft Punk", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316653/San_Francisco_-_Sound_of_Legend_kompkd.mp3" },
+        { name: "Don’t stop the music – Rihanna", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316653/Espresso_-_Sabrina_Carpenter_t9qno1.mp3" },
+        { name: "Espresso – Sabrina Carpenter", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316653/Flowers_-_Miley_Cyrus_p8zgqd.mp3" },
+        { name: "Gata Only – FloyyMenor ft Cros MJ", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316653/One_More_Time_-_Daft_Punk_g3mbgh.mp3" },
+        { name: "Flowers – Miley Cyrus", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316653/Gata_Only_-_FloyyMenor_ft_Cris_MJ_mtkuwe.mp3" },
+        { name: "Bellie Jean – Michael Jackson", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316652/Cheri_Cheri_Lady_-_Moderne_Talking_hef8bo.mp3" },
+        { name: "Cheri Cheri Mady – Moderne Talking", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316652/Dont_t_stop_the_music_-_Rihanna_hc1sa1.mp3" },
+        { name: "Ain’t your Mama – Jennifer Lopez", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316652/Beggin_-_M%C3%A2neskin_bjcage.mp3" },
+        { name: "Beggin – Mâneskin", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780316652/Billie_Jean_-_Micha%C3%ABl_Jackson_rej5a7.mp3" },
+        { name: "Unstoppable - Sia", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780317428/Unstoppable_-_Sia_1_vjwicq.mp3" }
+    ];
+
+    let quizSessionData = [];
+    let currentTrackIdx = 0;
+    let currentScore = 0;
+    let selectedLevel = 1;
+    let trackStateAnswered = false;
+
+    let timerTotalSeconds = 0;
+    let timerClockInterval = null;
+
+    const hiddenAudioNode = document.getElementById('hidden-core-audio');
+    const welcomeContainer = document.getElementById('welcome-screen');
+    const gameContainer = document.getElementById('game-screen');
+    const scoreContainer = document.getElementById('score-screen');
+    const customPlayBtn = document.getElementById('custom-play-trigger');
+    const progressFill = document.getElementById('progress-indicator');
+    const playIconSvg = document.getElementById('play-svg');
+    const choicesBox = document.getElementById('choices-grid-box');
+    const keyboardInputWrapper = document.getElementById('text-input-wrapper');
+    const rawInputField = document.getElementById('user-typed-title');
+    const dropdownSuggestionsBox = document.getElementById('suggestions-box');
+    const forwardBtn = document.getElementById('forward-action-btn');
+
+    // Extrait uniquement le titre pur (supprime tout ce qui vient après le tiret)
+    function cleanTrackTitleOnly(fullName) {
+        if (fullName.includes('-')) return fullName.split('-')[0].trim();
+        if (fullName.includes('–')) return fullName.split('–')[0].trim();
+        return fullName.trim();
+    }
+
+    function selectLevelAndStart(lvl) {
+        selectedLevel = lvl;
+        welcomeContainer.style.display = "none";
+        gameContainer.style.display = "block";
+        buildSessionGame();
+    }
+
+    function buildSessionGame() {
+        let randomized = [...allTracks].sort(() => Math.random() - 0.5);
+        quizSessionData = randomized.slice(0, 10);
+        currentTrackIdx = 0;
+        currentScore = 0;
+        timerTotalSeconds = 0;
+        document.getElementById('global-timer').innerText = "00:00";
+        
+        if(timerClockInterval) clearInterval(timerClockInterval);
+        timerClockInterval = setInterval(() => {
+            timerTotalSeconds++;
+            let mm = Math.floor(timerTotalSeconds / 60).toString().padStart(2, '0');
+            let ss = (timerTotalSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('global-timer').innerText = `${mm}:${ss}`;
+        }, 1000);
+
+        loadCurrentTrackSetup();
+    }
+
+    function loadCurrentTrackSetup() {
+        trackStateAnswered = false;
+        forwardBtn.style.display = "none";
+        choicesBox.innerHTML = "";
+        rawInputField.value = "";
+        rawInputField.style.borderColor = "var(--glass-border)";
+        dropdownSuggestionsBox.style.display = "none";
+        progressFill.style.width = "0%";
+
+        if(selectedLevel === 4) {
+            choicesBox.style.display = "none";
+            keyboardInputWrapper.style.display = "flex";
+        } else {
+            choicesBox.style.display = "grid";
+            keyboardInputWrapper.style.display = "none";
+            if(selectedLevel === 3) choicesBox.className = "options-grid grid-8";
+            else choicesBox.className = "options-grid";
+        }
+
+        const exactData = quizSessionData[currentTrackIdx];
+        document.getElementById('track-number').innerText = `${currentTrackIdx + 1} / 10`;
+        document.getElementById('current-score').innerText = currentScore;
+
+        hiddenAudioNode.src = exactData.audio;
+        hiddenAudioNode.load();
+
+        hiddenAudioNode.onloadedmetadata = function() {
+            if(selectedLevel >= 2) {
+                let startLimit = Math.random() * (hiddenAudioNode.duration * 0.4);
+                hiddenAudioNode.currentTime = startLimit;
+            } else {
+                hiddenAudioNode.currentTime = 0;
+            }
+            playTrackAudio();
+        };
+
+        hiddenAudioNode.ontimeupdate = function() {
+            let pct = (hiddenAudioNode.currentTime / hiddenAudioNode.duration) * 100;
+            progressFill.style.width = `${pct}%`;
+        };
+
+        if(selectedLevel !== 4) {
+            deployMultipleChoicesGrid(exactData);
+        }
+    }
+
+    function deployMultipleChoicesGrid(exactData) {
+        let totalItemsCount = selectedLevel === 3 ? 8 : 4;
+        
+        // Pour Niv 1, 2, 3 -> On stocke et affiche le nom COMPLET avec l'artiste
+        let generatedChoicesFull = [exactData.name];
+
+        while(generatedChoicesFull.length < totalItemsCount) {
+            let fallbackTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
+            if(!generatedChoicesFull.includes(fallbackTrack.name)) {
+                generatedChoicesFull.push(fallbackTrack.name);
+            }
+        }
+        generatedChoicesFull.sort(() => Math.random() - 0.5);
+
+        generatedChoicesFull.forEach(fullNameStr => {
+            let btn = document.createElement('button');
+            btn.className = "choice-btn";
+            btn.innerText = fullNameStr; // Affiche Titre + Artiste entier
+            btn.onclick = () => validateSelectionAction(fullNameStr, btn);
+            choicesBox.appendChild(btn);
+        });
+    }
+
+    function validateSelectionAction(chosenString, elementRef) {
+        if(trackStateAnswered) return;
+        trackStateAnswered = true;
+
+        const currentTarget = quizSessionData[currentTrackIdx];
+
+        if(selectedLevel === 4) {
+            // Saisie Clavier Niveau 4 : L'artiste n'est PAS à mentionner.
+            // On extrait uniquement le titre du morceau ciblé
+            let correctCleanTitle = cleanTrackTitleOnly(currentTarget.name).toLowerCase().trim();
+            let userTypedValue = chosenString.toLowerCase().trim();
+            
+            // Validation si le texte saisi fait au moins 50% de la longueur du titre pur
+            if(correctCleanTitle.includes(userTypedValue) && userTypedValue.length >= Math.floor(correctCleanTitle.length / 2)) {
+                rawInputField.style.borderColor = "var(--accent-green)";
+                rawInputField.value = `✅ Juste ! Reponse : ${cleanTrackTitleOnly(currentTarget.name)}`;
+                currentScore++;
+            } else {
+                rawInputField.style.borderColor = "var(--accent-red)";
+                rawInputField.value = `❌ Faux ! Titre attendu : ${cleanTrackTitleOnly(currentTarget.name)}`;
+            }
+            document.getElementById('current-score').innerText = currentScore;
+            
+            // Niveau 4 conserve le bouton d'enchaînement manuel
+            forwardBtn.style.display = "block";
+        } else {
+            // Niveaux 1, 2, 3 : Enchaînement FLASH Automatique (1 seconde de statut)
+            let totalButtons = choicesBox.getElementsByClassName('choice-btn');
+            
+            if(chosenString === currentTarget.name) {
+                elementRef.classList.add('correct');
+                currentScore++;
+            } else {
+                elementRef.classList.add('wrong');
+                for(let b of totalButtons) {
+                    if(b.innerText === currentTarget.name) b.classList.add('correct');
+                }
+            }
+            document.getElementById('current-score').innerText = currentScore;
+
+            // Bloque et passe au morceau suivant après exactement 1000ms (1 seconde)
+            setTimeout(() => {
+                goToNextTrack();
+            }, 1000);
+        }
+        playTrackAudio();
+    }
+
+    function processUserTyping() {
+        if(trackStateAnswered) return;
+        let queryStr = rawInputField.value.toLowerCase().trim();
+        if(queryStr.length < 2) {
+            dropdownSuggestionsBox.style.display = "none";
+            return;
+        }
+
+        // Recherche globale
+        let filteredMatches = allTracks.filter(t => t.name.toLowerCase().includes(queryStr));
+
+        if(filteredMatches.length > 0) {
+            dropdownSuggestionsBox.innerHTML = "";
+            filteredMatches.forEach(matchObj => {
+                let row = document.createElement('div');
+                row.className = "suggestion-row";
+                
+                // INSTRUCTION SPÉCIFIQUE : Dans la sélection Niveau 4, tout le nom entier s'affiche (+ Artiste)
+                row.innerText = matchObj.name; 
+                
+                row.onclick = () => {
+                    dropdownSuggestionsBox.style.display = "none";
+                    // Mais on envoie uniquement le Titre Pur pour la validation
+                    let titreSansArtiste = cleanTrackTitleOnly(matchObj.name);
+                    validateSelectionAction(titreSansArtiste, null);
+                };
+                dropdownSuggestionsBox.appendChild(row);
+            });
+            dropdownSuggestionsBox.style.display = "block";
+        } else {
+            dropdownSuggestionsBox.style.display = "none";
+        }
+    }
+
+    function goToNextTrack() {
+        hiddenAudioNode.pause();
+        currentTrackIdx++;
+        if(currentTrackIdx < quizSessionData.length) {
+            loadCurrentTrackSetup();
+        } else {
+            clearInterval(timerClockInterval);
+            gameContainer.style.display = "none";
+            scoreContainer.style.display = "block";
+            document.getElementById('final-marked-score').innerText = currentScore;
+            document.getElementById('final-marked-time').innerText = document.getElementById('global-timer').innerText;
+        }
+    }
+
+    function bypassCurrentTrack() {
+        if(welcomeContainer.style.display === "flex" || scoreContainer.style.display === "block") return;
+        let filteredPool = allTracks.filter(t => !quizSessionData.map(q => q.name).includes(t.name));
+        if(filteredPool.length > 0) {
+            let replacedTrack = filteredPool[Math.floor(Math.random() * filteredPool.length)];
+            quizSessionData[currentTrackIdx] = replacedTrack;
+            loadCurrentTrackSetup();
+        }
+    }
+
+    function triggerSessionRestart() {
+        if(confirm("⚠️ Redémarrer la session en cours ?")) {
+            if(gameContainer.style.display === "block") {
+                buildSessionGame();
+            } else {
+                resetToGlobalWelcome();
+            }
+        }
+    }
+
+    function resetToGlobalWelcome() {
+        clearInterval(timerClockInterval);
+        hiddenAudioNode.pause();
+        scoreContainer.style.display = "none";
+        gameContainer.style.display = "none";
+        welcomeContainer.style.display = "flex";
+    }
+
+    function playTrackAudio() {
+        hiddenAudioNode.play().then(() => {
+            customPlayBtn.classList.add('playing');
+            playIconSvg.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+        }).catch(() => console.log("Lancement audio en attente d'action manuelle."));
+    }
+
+    function toggleAudioPlayback() {
+        if(hiddenAudioNode.paused) {
+            playTrackAudio();
+        } else {
+            hiddenAudioNode.pause();
+            customPlayBtn.classList.remove('playing');
+            playIconSvg.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+        }
+    }
+</script>
+</body>
+</html>
