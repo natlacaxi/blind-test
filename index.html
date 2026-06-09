@@ -2,172 +2,463 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>BLIND TEST — SESSION DE 10 PISTES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blind Test — iOS 26.5 Liquid Vision</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --bg: #0a0a0f;
-            --panel: #111118;
-            --border: #252535;
-            --accent: #00d4ff;
-            --accent2: #ff3080;
-            --text: #e8e8f0;
-            --text2: #9090a8;
-            --green: #00ff88;
-            --red: #ff4444;
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-shine: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 50%);
+            --accent: #007aff;
+            --accent-neon: #00f0ff;
+            --accent-green: #30d158;
+            --accent-red: #ff453a;
+            --text-main: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.65);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg);
-            color: var(--text);
+            background: #020205;
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
+            padding-bottom: 120px;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        .quiz-container {
-            background-color: var(--panel);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 600px;
+        /* iOS 26.5 MAXIMUM LIQUID ENGINE */
+        .liquid-core {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0c0a1c 0%, #020205 100%);
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.45;
+            mix-blend-mode: screen;
+            animation: moveLiquid 18s ease-in-out infinite alternate;
+        }
+        .blob-1 { width: 500px; height: 500px; background: #007aff; top: -10%; left: -10%; animation-delay: 0s; }
+        .blob-2 { width: 600px; height: 600px; background: #ff2d55; bottom: -15%; right: -5%; animation-delay: -4s; }
+        .blob-3 { width: 450px; height: 450px; background: #af52de; top: 40%; left: 50%; animation-delay: -8s; }
+        .blob-4 { width: 350px; height: 350px; background: #00f0ff; bottom: 20%; left: 10%; animation-delay: -12s; }
+
+        @keyframes moveLiquid {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            33% { transform: translate(70px, -50px) scale(1.15) rotate(120deg); }
+            66% { transform: translate(-40px, 60px) scale(0.9) rotate(240deg); }
+            100% { transform: translate(30px, -20px) scale(1.1) rotate(360deg); }
+        }
+
+        /* ULTRA GLASS PANEL */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(45px) saturate(250%);
+            -webkit-backdrop-filter: blur(45px) saturate(250%);
+            border: 1px solid var(--glass-border);
+            border-radius: 36px;
+            padding: 35px;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 550px;
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.7),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+                        0 0 40px rgba(0, 122, 255, 0.05);
+            position: relative;
+            overflow: hidden;
             text-align: center;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100%;
+            background: var(--glass-shine);
+            pointer-events: none;
+            z-index: 1;
         }
 
         h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--accent);
-            font-size: 24px;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 30px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .question-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 14px;
-            color: var(--text2);
-            margin-bottom: 15px;
+        #welcome-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        audio {
-            width: 100%;
-            margin-bottom: 25px;
-            outline: none;
+        .welcome-desc {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
-        audio::-webkit-media-controls-panel {
-            background-color: #181825;
-        }
-
-        .options {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .option-btn {
-            background: #181825;
-            border: 1px solid var(--border);
-            color: var(--text);
-            border-radius: 8px;
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 500;
+        /* CARD SELECTION */
+        .level-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 18px 22px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
         }
 
-        .option-btn:hover {
-            border-color: var(--accent);
-            background: #1e1e30;
+        .level-card::after {
+            content: ''; position: absolute; inset: 0; border-radius: 22px;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0); transition: box-shadow 0.3s;
         }
 
-        .option-btn.correct {
-            background-color: rgba(0, 255, 136, 0.15) !important;
-            border-color: var(--green) !important;
-            color: var(--green);
-            font-weight: 600;
+        .level-card:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255,255,255,0.3);
+            transform: scale(1.02) translateY(-2px);
+        }
+        .level-card:hover::after {
+            box-shadow: 0 0 25px rgba(0, 122, 255, 0.25);
         }
 
-        .option-btn.wrong {
-            background-color: rgba(255, 68, 68, 0.15) !important;
-            border-color: var(--red) !important;
-            color: var(--red);
-        }
-
-        .action-btn {
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(135deg, var(--accent), #00a2ff);
-            color: #000;
+        .level-card h3 {
+            font-size: 18px;
             font-weight: 700;
-            border: none;
-            border-radius: 8px;
-            padding: 14px 30px;
+            margin-bottom: 4px;
+            background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .level-card p {
             font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        #game-screen { display: none; }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 12px 24px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-bar span { color: #fff; font-weight: 700; }
+
+        /* PLAYER */
+        .custom-audio-player {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 28px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .play-btn-huge {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #ffffff 0%, #dcdcdc 100%);
+            border: none; display: flex; justify-content: center; align-items: center;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.1s, box-shadow 0.2s;
-            display: none;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), inset 0 3px 3px #fff, 0 0 30px rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.15, 0.85, 0.3, 1.2);
         }
 
-        .action-btn:hover {
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        .play-btn-huge:active { transform: scale(0.9); }
+
+        .play-btn-huge svg { width: 32px; height: 32px; fill: #000; margin-left: 5px; }
+        .play-btn-huge.playing svg { margin-left: 0; }
+
+        .progress-timeline {
+            width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px; position: relative; overflow: hidden;
         }
 
-        .score-container {
-            display: none;
+        .progress-bar-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-neon));
+            border-radius: 4px;
+            box-shadow: 0 0 12px var(--accent-neon);
+            transition: width 0.1s linear;
         }
 
-        .score-container h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--accent2);
-            font-size: 32px;
-            margin-bottom: 15px;
+        /* GRID PROP CHOC */
+        .options-grid {
+            display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 25px;
+        }
+        .options-grid.grid-8 { grid-template-columns: repeat(2, 1fr); }
+
+        @media (max-width: 480px) {
+            .options-grid.grid-8 { grid-template-columns: 1fr; }
+        }
+
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 18px 22px; font-size: 15px; font-weight: 600;
+            border-radius: 20px; cursor: pointer; text-align: left;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+
+        .choice-btn.correct {
+            background: linear-gradient(135deg, rgba(48, 209, 88, 0.25), rgba(48, 209, 88, 0.4)) !important;
+            border-color: var(--accent-green) !important;
+            color: #fff; font-weight: 700;
+            box-shadow: 0 0 30px rgba(48, 209, 88, 0.4);
+            animation: successPulse 0.4s ease-in-out;
+        }
+
+        .choice-btn.wrong {
+            background: linear-gradient(135deg, rgba(255, 69, 58, 0.25), rgba(255, 69, 58, 0.4)) !important;
+            border-color: var(--accent-red) !important;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255, 69, 58, 0.3);
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        /* LEVEL 4 INPUT */
+        .input-box-wrapper {
+            display: none; flex-direction: column; position: relative; margin-bottom: 25px;
+        }
+
+        .text-input-field {
+            width: 100%; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 20px; color: #fff; font-size: 16px; font-weight: 600;
+            outline: none; text-align: center;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .text-input-field:focus {
+            border-color: var(--accent-neon);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* SUGGESTIONS */
+        .suggestions-dropdown {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: rgba(10, 10, 20, 0.85);
+            backdrop-filter: blur(35px) saturate(200%);
+            -webkit-backdrop-filter: blur(35px) saturate(200%);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px; max-height: 220px; overflow-y: auto;
+            z-index: 999; margin-top: 8px; display: none;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .suggestion-row {
+            padding: 16px 20px; cursor: pointer; text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85);
+            transition: background 0.2s;
+        }
+
+        .suggestion-row:hover {
+            background: linear-gradient(90deg, rgba(0, 122, 255, 0.35), rgba(0, 240, 255, 0.1));
+            color: #fff; font-weight: 600;
+        }
+
+        .main-action-trigger {
+            background: linear-gradient(135deg, var(--accent), #0051a8);
+            color: #fff; border: none; border-radius: 20px;
+            padding: 18px; width: 100%; font-size: 16px; font-weight: 700;
+            cursor: pointer; display: none;
+            box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4);
+            transition: all 0.3s;
+        }
+
+        .main-action-trigger:active { transform: scale(0.97); }
+
+        #score-screen { display: none; }
+        .huge-score {
+            font-size: 64px; font-weight: 800; margin: 20px 0;
+            background: linear-gradient(180deg, #00f0ff, #007aff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 12px rgba(0,122,255,0.3));
+        }
+
+        .primary-controls {
+            margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+        }
+
+        .big-util-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 16px 12px; border-radius: 20px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            backdrop-filter: blur(10px); transition: all 0.2s;
+        }
+
+        .big-util-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+
+        .big-util-btn.restart-danger:hover {
+            border-color: var(--accent-red);
+            background: rgba(255, 69, 58, 0.15);
+            color: #ff453a;
+            box-shadow: 0 0 15px rgba(255, 69, 58, 0.1);
+        }
+
+        /* DOCK IOS 26.5 */
+        .ios-dock {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(45px) saturate(230%);
+            -webkit-backdrop-filter: blur(45px) saturate(230%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px; padding: 12px 24px;
+            display: flex; align-items: center; gap: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2);
+            z-index: 1000; width: max-content; max-width: 92vw;
+        }
+
+        .dock-circle-item {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 22px; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none; position: relative;
+        }
+
+        .dock-circle-item:hover {
+            transform: scale(1.2) translateY(-8px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
-<div class="quiz-container">
-    <div id="quiz-game">
-        <h1>Cosmic Blind Test</h1>
-        <div class="question-number" id="question-title">Piste 1 / 10</div>
-        
-        <audio id="audio-player" controls controlsList="nodownload">
-            <source id="audio-source" src="" type="audio/mpeg">
-        </audio>
-
-        <div class="options" id="options-container"></div>
-
-        <button class="action-btn" id="next-button" onclick="nextQuestion()">Piste Suivante</button>
+    <div class="liquid-core">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
     </div>
 
-    <div id="quiz-score" class="score-container">
-        <h1>Session Terminée !</h1>
-        <h2>Score : <span id="final-score">0</span> / 10</h2>
-        <p id="score-comment"></p>
-        <button class="action-btn" style="display: inline-block;" onclick="restartQuiz()">Nouvelle Session (10 titres)</button>
+    <div class="glass-panel">
+        <h1>Blind Test</h1>
+
+        <div id="welcome-screen">
+            <p class="welcome-desc">Sélectionnez un pack de jeu liquide iOS 26.5</p>
+            <div class="level-card" onclick="selectLevelAndStart(1)">
+                <h3>Niveau 1</h3>
+                <p>Début de la piste — Titre + Artiste visibles</p>
+            </div>
+            <div class="level-card" onclick="selectLevelAndStart(2)">
+                <h3>Niveau 2</h3>
+                <p>Début aléatoire en milieu — Titre + Artiste visibles</p>
+            </div>
+            <div class="level-card" onclick="selectLevelAndStart(3)">
+                <h3>Niveau 3</h3>
+                <p>Milieu aléatoire — Grille de 8 choix complets</p>
+            </div>
+            <div class="level-card" onclick="selectLevelAndStart(4)">
+                <h3>Niveau 4</h3>
+                <p>Saisie clavier (Moitié du titre suffisant, sans l'artiste)</p>
+            </div>
+        </div>
+
+        <div id="game-screen">
+            <div class="stats-bar">
+                <div>Piste : <span id="track-number">1 / 10</span></div>
+                <div>Score : <span id="current-score">0</span></div>
+                <div>Temps : <span id="global-timer">00:00</span></div>
+            </div>
+
+            <div class="custom-audio-player">
+                <button class="play-btn-huge" id="custom-play-trigger" onclick="toggleAudioPlayback()">
+                    <svg id="play-svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <div class="progress-timeline">
+                    <div class="progress-bar-fill" id="progress-indicator"></div>
+                </div>
+            </div>
+
+            <div class="options-grid" id="choices-grid-box"></div>
+
+            <div class="input-box-wrapper" id="text-input-wrapper">
+                <input type="text" class="text-input-field" id="user-typed-title" placeholder="Tapez le titre..." autocomplete="off" oninput="processUserTyping()">
+                <div class="suggestions-dropdown" id="suggestions-box"></div>
+            </div>
+
+            <button class="main-action-trigger" id="forward-action-btn" onclick="goToNextTrack()">Piste Suivante</button>
+        </div>
+
+        <div id="score-screen">
+            <h3 style="font-size:24px; font-weight:700;">Session Terminée !</h3>
+            <div class="huge-score"><span id="final-marked-score">0</span> / 10</div>
+            <p style="color:var(--text-secondary); margin-bottom: 25px;">Temps global : <span id="final-marked-time" style="color:#fff; font-weight:700;">00:00</span></p>
+            <button class="main-action-trigger" style="display:block; background: linear-gradient(135deg, var(--accent-green), #1d9e3b);" onclick="resetToGlobalWelcome()">Relancer une session</button>
+        </div>
+
+        <div class="primary-controls">
+            <button class="big-util-btn restart-danger" onclick="triggerSessionRestart()">🔄 Recommencer</button>
+            <button class="big-util-btn" onclick="bypassCurrentTrack()">⏭️ Sauter titre</button>
+        </div>
     </div>
-</div>
+
+    <div class="ios-dock">
+        <a href="https://natlacaxi.github.io/music" target="_blank" class="dock-circle-item">🎵</a>
+        <a href="https://natlacaxi.github.io/dj-mode" target="_blank" class="dock-circle-item">🎧</a>
+        <a href="https://natlacaxi.github.io/paroles-music" target="_blank" class="dock-circle-item">🎤</a>
+    </div>
+
+    <audio id="hidden-core-audio"></audio>
 
 <script>
     const allTracks = [
@@ -335,104 +626,270 @@
         { name: "Unstoppable - Sia", audio: "https://res.cloudinary.com/dmvoedoe6/video/upload/v1780317428/Unstoppable_-_Sia_1_vjwicq.mp3" }
     ];
 
-    let quizData = []; // Contiendra les 10 pistes sélectionnées pour la session
-    let currentTrackIndex = 0;
-    let score = 0;
-    let hasAnswered = false;
+    let quizSessionData = [];
+    let currentTrackIdx = 0;
+    let currentScore = 0;
+    let selectedLevel = 1;
+    let trackStateAnswered = false;
 
-    const audioPlayer = document.getElementById('audio-player');
-    const questionTitle = document.getElementById('question-title');
-    const optionsContainer = document.getElementById('options-container');
-    const nextButton = document.getElementById('next-button');
+    let timerTotalSeconds = 0;
+    let timerClockInterval = null;
 
-    function generateSession() {
-        // Mélanger l'ensemble des 162 pistes et en extraire 10 au hasard
-        let shuffled = [...allTracks].sort(() => Math.random() - 0.5);
-        quizData = shuffled.slice(0, 10);
-        currentTrackIndex = 0;
-        score = 0;
+    const hiddenAudioNode = document.getElementById('hidden-core-audio');
+    const welcomeContainer = document.getElementById('welcome-screen');
+    const gameContainer = document.getElementById('game-screen');
+    const scoreContainer = document.getElementById('score-screen');
+    const customPlayBtn = document.getElementById('custom-play-trigger');
+    const progressFill = document.getElementById('progress-indicator');
+    const playIconSvg = document.getElementById('play-svg');
+    const choicesBox = document.getElementById('choices-grid-box');
+    const keyboardInputWrapper = document.getElementById('text-input-wrapper');
+    const rawInputField = document.getElementById('user-typed-title');
+    const dropdownSuggestionsBox = document.getElementById('suggestions-box');
+    const forwardBtn = document.getElementById('forward-action-btn');
+
+    // Extrait uniquement le titre pur (supprime tout ce qui vient après le tiret)
+    function cleanTrackTitleOnly(fullName) {
+        if (fullName.includes('-')) return fullName.split('-')[0].trim();
+        if (fullName.includes('–')) return fullName.split('–')[0].trim();
+        return fullName.trim();
     }
 
-    function loadTrack() {
-        hasAnswered = false;
-        nextButton.style.display = "none";
-        optionsContainer.innerHTML = "";
+    function selectLevelAndStart(lvl) {
+        selectedLevel = lvl;
+        welcomeContainer.style.display = "none";
+        gameContainer.style.display = "block";
+        buildSessionGame();
+    }
 
-        const currentData = quizData[currentTrackIndex];
-        questionTitle.innerText = `Piste ${currentTrackIndex + 1} / 10`;
-        audioPlayer.src = currentData.audio;
-        audioPlayer.load();
+    function buildSessionGame() {
+        let randomized = [...allTracks].sort(() => Math.random() - 0.5);
+        quizSessionData = randomized.slice(0, 10);
+        currentTrackIdx = 0;
+        currentScore = 0;
+        timerTotalSeconds = 0;
+        document.getElementById('global-timer').innerText = "00:00";
+        
+        if(timerClockInterval) clearInterval(timerClockInterval);
+        timerClockInterval = setInterval(() => {
+            timerTotalSeconds++;
+            let mm = Math.floor(timerTotalSeconds / 60).toString().padStart(2, '0');
+            let ss = (timerTotalSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('global-timer').innerText = `${mm}:${ss}`;
+        }, 1000);
 
-        // Création des choix (la bonne réponse + 3 faux choix tirés de la base globale)
-        let choices = [currentData.name];
-        while (choices.length < 4) {
-            let randomTrack = allTracks[Math.floor(Math.random() * allTracks.length)].name;
-            if (!choices.includes(randomTrack)) {
-                choices.push(randomTrack);
-            }
+        loadCurrentTrackSetup();
+    }
+
+    function loadCurrentTrackSetup() {
+        trackStateAnswered = false;
+        forwardBtn.style.display = "none";
+        choicesBox.innerHTML = "";
+        rawInputField.value = "";
+        rawInputField.style.borderColor = "var(--glass-border)";
+        dropdownSuggestionsBox.style.display = "none";
+        progressFill.style.width = "0%";
+
+        if(selectedLevel === 4) {
+            choicesBox.style.display = "none";
+            keyboardInputWrapper.style.display = "flex";
+        } else {
+            choicesBox.style.display = "grid";
+            keyboardInputWrapper.style.display = "none";
+            if(selectedLevel === 3) choicesBox.className = "options-grid grid-8";
+            else choicesBox.className = "options-grid";
         }
 
-        // Mélanger les 4 boutons d'options
-        choices.sort(() => Math.random() - 0.5);
+        const exactData = quizSessionData[currentTrackIdx];
+        document.getElementById('track-number').innerText = `${currentTrackIdx + 1} / 10`;
+        document.getElementById('current-score').innerText = currentScore;
 
-        choices.forEach(choice => {
-            const button = document.createElement('button');
-            button.className = 'option-btn';
-            button.innerText = choice;
-            button.onclick = () => verifySelection(choice, button);
-            optionsContainer.appendChild(button);
+        hiddenAudioNode.src = exactData.audio;
+        hiddenAudioNode.load();
+
+        hiddenAudioNode.onloadedmetadata = function() {
+            if(selectedLevel >= 2) {
+                let startLimit = Math.random() * (hiddenAudioNode.duration * 0.4);
+                hiddenAudioNode.currentTime = startLimit;
+            } else {
+                hiddenAudioNode.currentTime = 0;
+            }
+            playTrackAudio();
+        };
+
+        hiddenAudioNode.ontimeupdate = function() {
+            let pct = (hiddenAudioNode.currentTime / hiddenAudioNode.duration) * 100;
+            progressFill.style.width = `${pct}%`;
+        };
+
+        if(selectedLevel !== 4) {
+            deployMultipleChoicesGrid(exactData);
+        }
+    }
+
+    function deployMultipleChoicesGrid(exactData) {
+        let totalItemsCount = selectedLevel === 3 ? 8 : 4;
+        
+        // Pour Niv 1, 2, 3 -> On stocke et affiche le nom COMPLET avec l'artiste
+        let generatedChoicesFull = [exactData.name];
+
+        while(generatedChoicesFull.length < totalItemsCount) {
+            let fallbackTrack = allTracks[Math.floor(Math.random() * allTracks.length)];
+            if(!generatedChoicesFull.includes(fallbackTrack.name)) {
+                generatedChoicesFull.push(fallbackTrack.name);
+            }
+        }
+        generatedChoicesFull.sort(() => Math.random() - 0.5);
+
+        generatedChoicesFull.forEach(fullNameStr => {
+            let btn = document.createElement('button');
+            btn.className = "choice-btn";
+            btn.innerText = fullNameStr; // Affiche Titre + Artiste entier
+            btn.onclick = () => validateSelectionAction(fullNameStr, btn);
+            choicesBox.appendChild(btn);
         });
     }
 
-    function verifySelection(selectedName, selectedButton) {
-        if (hasAnswered) return;
-        hasAnswered = true;
+    function validateSelectionAction(chosenString, elementRef) {
+        if(trackStateAnswered) return;
+        trackStateAnswered = true;
 
-        const currentData = quizData[currentTrackIndex];
-        const buttons = optionsContainer.getElementsByClassName('option-btn');
+        const currentTarget = quizSessionData[currentTrackIdx];
 
-        if (selectedName === currentData.name) {
-            selectedButton.classList.add('correct');
-            score++;
+        if(selectedLevel === 4) {
+            // Saisie Clavier Niveau 4 : L'artiste n'est PAS à mentionner.
+            // On extrait uniquement le titre du morceau ciblé
+            let correctCleanTitle = cleanTrackTitleOnly(currentTarget.name).toLowerCase().trim();
+            let userTypedValue = chosenString.toLowerCase().trim();
+            
+            // Validation si le texte saisi fait au moins 50% de la longueur du titre pur
+            if(correctCleanTitle.includes(userTypedValue) && userTypedValue.length >= Math.floor(correctCleanTitle.length / 2)) {
+                rawInputField.style.borderColor = "var(--accent-green)";
+                rawInputField.value = `✅ Juste ! Reponse : ${cleanTrackTitleOnly(currentTarget.name)}`;
+                currentScore++;
+            } else {
+                rawInputField.style.borderColor = "var(--accent-red)";
+                rawInputField.value = `❌ Faux ! Titre attendu : ${cleanTrackTitleOnly(currentTarget.name)}`;
+            }
+            document.getElementById('current-score').innerText = currentScore;
+            
+            // Niveau 4 conserve le bouton d'enchaînement manuel
+            forwardBtn.style.display = "block";
         } else {
-            selectedButton.classList.add('wrong');
-            for (let btn of buttons) {
-                if (btn.innerText === currentData.name) {
-                    btn.classList.add('correct');
+            // Niveaux 1, 2, 3 : Enchaînement FLASH Automatique (1 seconde de statut)
+            let totalButtons = choicesBox.getElementsByClassName('choice-btn');
+            
+            if(chosenString === currentTarget.name) {
+                elementRef.classList.add('correct');
+                currentScore++;
+            } else {
+                elementRef.classList.add('wrong');
+                for(let b of totalButtons) {
+                    if(b.innerText === currentTarget.name) b.classList.add('correct');
                 }
             }
+            document.getElementById('current-score').innerText = currentScore;
+
+            // Bloque et passe au morceau suivant après exactement 1000ms (1 seconde)
+            setTimeout(() => {
+                goToNextTrack();
+            }, 1000);
         }
-        nextButton.style.display = "inline-block";
+        playTrackAudio();
     }
 
-    function nextQuestion() {
-        audioPlayer.pause();
-        currentTrackIndex++;
-        if (currentTrackIndex < quizData.length) {
-            loadTrack();
+    function processUserTyping() {
+        if(trackStateAnswered) return;
+        let queryStr = rawInputField.value.toLowerCase().trim();
+        if(queryStr.length < 2) {
+            dropdownSuggestionsBox.style.display = "none";
+            return;
+        }
+
+        // Recherche globale
+        let filteredMatches = allTracks.filter(t => t.name.toLowerCase().includes(queryStr));
+
+        if(filteredMatches.length > 0) {
+            dropdownSuggestionsBox.innerHTML = "";
+            filteredMatches.forEach(matchObj => {
+                let row = document.createElement('div');
+                row.className = "suggestion-row";
+                
+                // INSTRUCTION SPÉCIFIQUE : Dans la sélection Niveau 4, tout le nom entier s'affiche (+ Artiste)
+                row.innerText = matchObj.name; 
+                
+                row.onclick = () => {
+                    dropdownSuggestionsBox.style.display = "none";
+                    // Mais on envoie uniquement le Titre Pur pour la validation
+                    let titreSansArtiste = cleanTrackTitleOnly(matchObj.name);
+                    validateSelectionAction(titreSansArtiste, null);
+                };
+                dropdownSuggestionsBox.appendChild(row);
+            });
+            dropdownSuggestionsBox.style.display = "block";
         } else {
-            displayFinalScore();
+            dropdownSuggestionsBox.style.display = "none";
         }
     }
 
-    function displayFinalScore() {
-        document.getElementById('quiz-game').style.display = "none";
-        document.getElementById('quiz-score').style.display = "block";
-        document.getElementById('final-score').innerText = score;
+    function goToNextTrack() {
+        hiddenAudioNode.pause();
+        currentTrackIdx++;
+        if(currentTrackIdx < quizSessionData.length) {
+            loadCurrentTrackSetup();
+        } else {
+            clearInterval(timerClockInterval);
+            gameContainer.style.display = "none";
+            scoreContainer.style.display = "block";
+            document.getElementById('final-marked-score').innerText = currentScore;
+            document.getElementById('final-marked-time').innerText = document.getElementById('global-timer').innerText;
+        }
     }
 
-    function restartQuiz() {
-        document.getElementById('quiz-game').style.display = "block";
-        document.getElementById('quiz-score').style.display = "none";
-        generateSession();
-        loadTrack();
+    function bypassCurrentTrack() {
+        if(welcomeContainer.style.display === "flex" || scoreContainer.style.display === "block") return;
+        let filteredPool = allTracks.filter(t => !quizSessionData.map(q => q.name).includes(t.name));
+        if(filteredPool.length > 0) {
+            let replacedTrack = filteredPool[Math.floor(Math.random() * filteredPool.length)];
+            quizSessionData[currentTrackIdx] = replacedTrack;
+            loadCurrentTrackSetup();
+        }
     }
 
-    // Initialisation au chargement de la page
-    window.onload = function() {
-        generateSession();
-        loadTrack();
-    };
+    function triggerSessionRestart() {
+        if(confirm("⚠️ Redémarrer la session en cours ?")) {
+            if(gameContainer.style.display === "block") {
+                buildSessionGame();
+            } else {
+                resetToGlobalWelcome();
+            }
+        }
+    }
+
+    function resetToGlobalWelcome() {
+        clearInterval(timerClockInterval);
+        hiddenAudioNode.pause();
+        scoreContainer.style.display = "none";
+        gameContainer.style.display = "none";
+        welcomeContainer.style.display = "flex";
+    }
+
+    function playTrackAudio() {
+        hiddenAudioNode.play().then(() => {
+            customPlayBtn.classList.add('playing');
+            playIconSvg.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+        }).catch(() => console.log("Lancement audio en attente d'action manuelle."));
+    }
+
+    function toggleAudioPlayback() {
+        if(hiddenAudioNode.paused) {
+            playTrackAudio();
+        } else {
+            hiddenAudioNode.pause();
+            customPlayBtn.classList.remove('playing');
+            playIconSvg.innerHTML = `<path d="M8 5v14l11-7z"/>`;
+        }
+    }
 </script>
 </body>
 </html>
